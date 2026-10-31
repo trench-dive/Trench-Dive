@@ -1,0 +1,12 @@
+{
+  "name": "trench-dive",
+  "private": true,
+  "description": "A Krillion-style rare-answer trivia game in a single HTML file.",
+  "scripts": {
+    "build": "python3 src/build.py",
+    "test": "bash tests/run.sh"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}

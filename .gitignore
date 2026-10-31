@@ -1,0 +1,6 @@
+scratch/
+src/built.html
+src/built.test.html
+node_modules/
+__pycache__/
+.DS_Store
