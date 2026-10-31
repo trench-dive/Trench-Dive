@@ -149,6 +149,8 @@ html.calm .sc-b { animation: none; }
 .st-flag .flag-link { border: 0; text-decoration: underline; text-underline-offset: 3px; padding: 4px 2px; }
 .st-flag #flagOpts { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
 .st-flag #flagOpts[hidden], .st-flag [hidden] { display: none; }
+.miss-flag { font: inherit; font-size: 0.85em; color: inherit; background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; padding: 0 2px; cursor: pointer; opacity: 0.85; }
+.miss-flag.done { text-decoration: none; cursor: default; }
 .flag-acts { display: flex; gap: 6px; flex: none; }
 .tut-sheet { text-align: center; max-width: 420px; }
 .tut-emoji { font-size: 2.4rem; line-height: 1; margin: 4px 0 6px; }
@@ -829,6 +831,7 @@ button.res-row[aria-expanded="true"] .rq::after { content: " ▴"; }
     <div class="sub-slot"></div>
     <div class="cta-row">
       <button id="againBtn" class="btn primary big" type="button">Play again</button>
+      <button id="flagSendRes" class="btn share-btn" type="button" hidden>Send reports</button>
       <button id="shareBtn" class="btn share-btn" type="button" hidden><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2.6l4.6 4.6-1.5 1.5-2.05-2.05V15h-2.1V6.65L8.9 8.7 7.4 7.2zM5 11.4h3v2.1H6.6v6.4h10.8v-6.4H16v-2.1h3v10.6H5z"/></svg>Share result</button>
       <button id="homeBtn" class="btn" type="button">Back to dashboard</button>
     </div>
@@ -2247,6 +2250,9 @@ function notOnBoard(q, raw, lead) {
   msg.className = 'msg';
   msg.textContent = lead || ('“' + raw.trim() + '” is not on the board. ');
   msg.append('Try another answer, or pass.');
+  if (raw && raw.trim() && !lead) { const fb = document.createElement('button'); fb.type = 'button'; fb.className = 'miss-flag'; fb.textContent = 'Should it count?';
+    fb.addEventListener('click', () => { const f = flagsGet().filter(x => !(x.q === q.id && x.a === raw.trim() && x.v === 'missing')); f.push({ q: q.id, a: raw.trim(), t: -1, v: 'missing', d: nzDate() }); flagsSet(f); fb.replaceWith(Object.assign(document.createElement('span'), { className: 'miss-flag done', textContent: 'Reported, thanks.' })); try { $('ans').focus({ preventScroll: true }); } catch (e) {} });
+    msg.append(' ', fb); }
   SFX.wrong();
   const inp = $('ans'); inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
   inp.select();
@@ -2483,7 +2489,7 @@ function showWrap(mode, day, live, review, descend) {
   $('newBest').hidden = !(live && live.newBest && (live.had || pts > 0));
   $('resBestNote').textContent = live ? (live.newBest ? (live.had ? 'That beats your previous best of ' + live.prevBest + ' points.' : 'First dive on the books. Beat it next time.') : 'Your best is ' + fmt(save.bestPts) + ' points (' + fmt(save.bestPts * M_PER_PT) + ' m).') : '';
   $('againBtn').hidden = daily;
-  $('shareBtn').hidden = !daily; S.share = daily ? { day, tiers: results.map(r => r.tier), pts, depth, holi: holidayFor(day) } : null;
+  paintSendRes(); $('shareBtn').hidden = !daily; S.share = daily ? { day, tiers: results.map(r => r.tier), pts, depth, holi: holidayFor(day) } : null;
   const db = $('resDailyBest'); db.hidden = !daily;
   if (daily) {
     let best = null;
@@ -4431,22 +4437,31 @@ function frame(now) {
 // ---- v69: tier feedback ("Tier feel wrong?") ----
 // Flags are kept on this device. Copy gives you a plain list; set FEEDBACK_URL to your repo's new-issue page
 // (e.g. 'https://github.com/USER/REPO/issues/new') and a Send button opens a pre-filled GitHub issue instead.
-const FEEDBACK_URL = '';
+const FEEDBACK_URL = 'https://github.com/trench-dive/trench-dive/issues/new';
 const FLAG_KEY = 'trenchdive.flags.v1';
 const flagsGet = () => { try { const v = JSON.parse(localStorage.getItem(FLAG_KEY)); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
 const flagsSet = (v) => { try { localStorage.setItem(FLAG_KEY, JSON.stringify(v.slice(-500))); } catch (e) {} };
-function flagText() {
-  const f = flagsGet(); if (!f.length) return '';
-  return 'Trench Dive tier feedback (' + f.length + ')\n' + f.map(x => { const q = QS.find(y => y.id === x.q); return '- ' + (q ? q.prompt : x.q) + ' [' + x.q + '] | ' + x.a + ' | is ' + (TIER_NAMES[x.t] || x.t) + ' | ' + (x.v === 'rarer' ? 'should be rarer' : 'should be more common'); }).join('\n');
+const flagWhat = (x) => x.v === 'missing' ? 'not on the board | should count' : 'is ' + (TIER_NAMES[x.t] || x.t) + ' | ' + (x.v === 'rarer' ? 'should be rarer' : 'should be more common');
+function flagText(unsentOnly) {
+  const f = flagsGet().filter(x => !unsentOnly || !x.s); if (!f.length) return '';
+  return 'Trench Dive feedback (' + f.length + ')\n' + f.map(x => { const q = QS.find(y => y.id === x.q); return '- ' + (q ? q.prompt : x.q) + ' [' + x.q + '] | ' + x.a + ' | ' + flagWhat(x); }).join('\n');
 }
-function paintFlags() { const n = flagsGet().length; $('flagNote').textContent = n ? n + (n === 1 ? ' answer' : ' answers') + ' flagged with “Tier feel wrong?”.' : 'Nothing flagged yet. Tap “Tier feel wrong?” after an answer.'; $('flagCopy').disabled = !n; $('flagSend').hidden = !FEEDBACK_URL || !n; }
+const flagsUnsent = () => flagsGet().filter(x => !x.s).length;
+function paintFlags() { const n = flagsGet().length, u = flagsUnsent();
+  $('flagNote').textContent = n ? n + (n === 1 ? ' report' : ' reports') + (u ? ', ' + u + ' not sent yet' : ', all sent') + '. Send opens GitHub (free account needed).' : 'Nothing reported yet. Tap “Tier feel wrong?” after an answer, or “Should it count?” when an answer isn’t on the board.';
+  $('flagCopy').disabled = !n; $('flagSend').hidden = !FEEDBACK_URL || !u; }
+function sendFlags() { const t = flagText(true); if (!t || !FEEDBACK_URL) return;
+  window.open(FEEDBACK_URL + '?title=' + encodeURIComponent('Trench Dive feedback (' + flagsUnsent() + ')') + '&body=' + encodeURIComponent(t.slice(0, 6000)), '_blank', 'noopener');
+  flagsSet(flagsGet().map(x => Object.assign(x, { s: 1 }))); paintFlags(); paintSendRes(); }
+function paintSendRes() { const b = $('flagSendRes'); if (!b) return; const u = flagsUnsent(); b.hidden = !FEEDBACK_URL || !u; b.textContent = 'Send ' + u + (u === 1 ? ' report' : ' reports'); }
 $('flagBtn').addEventListener('click', () => { $('flagBtn').hidden = true; $('flagOpts').hidden = false; });
 $('flagOpts').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b || !S.flagRes) return;
   const r = S.flagRes, f = flagsGet().filter(x => !(x.q === r.qid && x.a === r.answer)); f.push({ q: r.qid, a: r.answer, t: r.tier, v: b.dataset.v, d: nzDate() }); flagsSet(f);
   $('flagOpts').hidden = true; $('flagDone').hidden = false; });
 $('flagCopy').addEventListener('click', () => { const t = flagText(); if (!t) return; const done = () => { $('flagCopy').textContent = 'Copied'; setTimeout(() => { $('flagCopy').textContent = 'Copy'; }, 1600); };
   try { navigator.clipboard.writeText(t).then(done, () => { prompt('Copy your tier feedback:', t); }); } catch (e) { prompt('Copy your tier feedback:', t); } });
-$('flagSend').addEventListener('click', () => { const t = flagText(); if (!t || !FEEDBACK_URL) return; window.open(FEEDBACK_URL + '?title=' + encodeURIComponent('Tier feedback') + '&body=' + encodeURIComponent(t.slice(0, 6000)), '_blank', 'noopener'); });
+$('flagSend').addEventListener('click', sendFlags);
+$('flagSendRes').addEventListener('click', sendFlags);
 $('gearBtn').addEventListener('click', paintFlags);
 
 // ---- v69: first-dive tutorial (everyone sees it once, including existing players) ----
