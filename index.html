@@ -165,6 +165,45 @@ html.calm .sc-b { animation: none; }
 .tut-dots i.on { background: #ffc65a; }
 .tut-nav { display: flex; justify-content: space-between; gap: 10px; }
 .tut-nav .btn { flex: 1; }
+/* ---- v91: bottom navigation + quests ---- */
+.botnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: none; justify-content: space-around; align-items: center; height: calc(62px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); background: #0a1a33; border-top: 1px solid rgba(160, 228, 255, 0.14); box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35); }
+body.nav-on .botnav { display: flex; }
+body.nav-on .screen:not(#dive):not(#result) { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+.botnav button { position: relative; flex: 1; height: 100%; display: grid; place-items: center; background: none; border: 0; color: #fff; opacity: 0.55; cursor: pointer; transition: opacity 0.2s; -webkit-tap-highlight-color: transparent; }
+.botnav button svg { width: 27px; height: 27px; }
+.botnav button.on { opacity: 1; }
+.botnav button.on::after { content: ""; position: absolute; bottom: 7px; width: 18px; height: 3px; border-radius: 2px; background: #fff; }
+.botnav button:focus-visible { outline: 2px solid #fff; outline-offset: -6px; border-radius: 12px; }
+.nav-dot { position: absolute; top: 13px; left: calc(50% + 8px); width: 9px; height: 9px; border-radius: 50%; background: #ff5c7a; border: 2px solid #0a1a33; }
+.qpage { max-width: 560px; width: 100%; margin: 0 auto; padding-inline: 16px; }
+.qp-title { font-size: 2rem; font-weight: 800; color: #fff; margin: 8px 0 2px; letter-spacing: 0.01em; }
+.mq { position: relative; overflow: hidden; border-radius: 20px; padding: 18px 16px 16px; background: var(--mc); color: #fff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+.mq-waves { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 70px; pointer-events: none; }
+.mq-fish { position: absolute; right: 8px; top: 46px; width: 74px; height: 56px; opacity: 0.9; pointer-events: none; }
+.mq-title { position: relative; font-size: 1.55rem; font-weight: 800; line-height: 1.15; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18); }
+.mq-time { position: relative; display: flex; align-items: center; gap: 6px; margin-top: 6px; font-weight: 800; font-size: 0.92rem; letter-spacing: 0.04em; }
+.mq-time svg, .dq-timer svg { width: 18px; height: 18px; }
+.mq-card { position: relative; margin-top: 18px; padding: 14px; border-radius: 14px; background: rgba(6, 20, 40, 0.88); }
+.mq-obj { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+.qbar { position: relative; height: 22px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); overflow: hidden; }
+.qbar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: inherit; background: var(--fill, #9b5cff); transition: width 0.9s cubic-bezier(0.2, 0.9, 0.3, 1); }
+.qbar span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45); }
+.mq .qbar { --fill: var(--mc); }
+.dq-head { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.dq-head h2 { margin: 0; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.08em; color: #fff; }
+.dq-timer { display: flex; align-items: center; gap: 6px; color: #ffc65a; font-weight: 800; font-size: 0.95rem; }
+.dq-list { border-radius: 18px; background: rgba(6, 20, 40, 0.93); border: 1px solid rgba(160, 228, 255, 0.12); }
+.dq { display: flex; align-items: center; gap: 14px; padding: 16px; }
+.dq + .dq { border-top: 1px solid rgba(160, 228, 255, 0.1); }
+.dq-l { flex: 1; min-width: 0; }
+.dq-t { font-size: 1.08rem; font-weight: 700; color: #fff; margin-bottom: 9px; }
+.dq-chest { flex: none; width: 50px; height: 50px; }
+.dq-chest svg { width: 100%; height: 100%; }
+.dq.done .qbar { --fill: #ffc65a; }
+.dq.done .dq-chest { filter: drop-shadow(0 0 10px rgba(255, 198, 90, 0.65)); }
+.lb-soon { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; padding: 40px 20px; border-radius: 18px; background: rgba(6, 20, 40, 0.93); color: var(--ink-soft); }
+.lb-soon svg { width: 64px; height: 64px; color: #fff; opacity: 0.85; }
+.lb-soon b { color: #fff; font-size: 1.2rem; }
 .cat-note { margin: -4px 0 12px; font-size: 0.85rem; color: var(--ink-soft); }
 .cc-when { display: block; color: var(--c); font-weight: 600; }
 .cc-mix { display: flex; height: 8px; border-radius: 5px; overflow: hidden; background: rgba(160, 228, 255, 0.08); }
@@ -650,6 +689,11 @@ button.res-row[aria-expanded="true"] .rq::after { content: " ▴"; }
 <div class="veil" id="veil" aria-hidden="true"><i style="left:8%;--r:10px;animation-delay:0ms"></i><i style="left:17%;--r:6px;animation-delay:60ms"></i><i style="left:26%;--r:14px;animation-delay:20ms"></i><i style="left:35%;--r:8px;animation-delay:90ms"></i><i style="left:44%;--r:5px;animation-delay:40ms"></i><i style="left:52%;--r:12px;animation-delay:10ms"></i><i style="left:61%;--r:7px;animation-delay:80ms"></i><i style="left:70%;--r:16px;animation-delay:30ms"></i><i style="left:79%;--r:6px;animation-delay:70ms"></i><i style="left:88%;--r:11px;animation-delay:50ms"></i><i style="left:94%;--r:8px;animation-delay:100ms"></i><i style="left:4%;--r:6px;animation-delay:110ms"></i></div>
 <div class="vignette" aria-hidden="true"></div>
 <div class="ach-toasts" id="achToasts" aria-live="polite"></div>
+<nav class="botnav" id="botnav" aria-label="Main">
+  <button type="button" data-go="home" aria-label="Dashboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11L12 4l8.5 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 9.6V20h4.6v-5.2h2.8V20H18V9.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg></button>
+  <button type="button" data-go="quests" aria-label="Quests"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 4h9v5.5a4.5 4.5 0 0 1-9 0z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M7.5 6H4.2v1.4A3.4 3.4 0 0 0 7.8 11M16.5 6h3.3v1.4a3.4 3.4 0 0 1-3.6 3.6M12 14v3.5M8.5 20h7M9.5 20l.6-2.5h3.8l.6 2.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><i class="nav-dot" id="questDot" hidden></i></button>
+  <button type="button" data-go="board" aria-label="Leaderboard"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14.5" r="5.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M8.7 9.6L6.2 3.5h3.7l2.1 4.2 2.1-4.2h3.7l-2.5 6.1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 12.2l.85 1.7 1.9.28-1.37 1.33.32 1.88L12 16.5l-1.7.9.32-1.88-1.37-1.33 1.9-.28z" fill="currentColor"/></svg></button>
+</nav>
     <div class="sheet-wrap" id="tutSheet" hidden role="dialog" aria-modal="true" aria-labelledby="tutTitle">
       <div class="sheet set-sheet tut-sheet">
         <div class="tut-step" data-i="0"><div class="tut-emoji" aria-hidden="true">🌊</div><h3 id="tutTitle">Welcome aboard</h3><p>Each dive is <b>7 prompts</b>, like “Name a fruit”. Type any answer that fits.</p></div>
@@ -817,6 +861,16 @@ button.res-row[aria-expanded="true"] .rq::after { content: " ▴"; }
     <button class="descend-btn" id="nextBtn" type="button" hidden><span>DESCEND</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 5v13M6.5 12.5L12 18l5.5-5.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </section>
 
+  <section id="quests" class="screen qpage" hidden aria-labelledby="qpTitle">
+    <h1 class="qp-title" id="qpTitle">Quests</h1>
+    <div id="mqBox"></div>
+    <div class="dq-head"><h2>DAILY QUESTS</h2><span class="dq-timer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7v5.2l3.4 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><b id="dqTimer"></b></span></div>
+    <div class="dq-list" id="dqList"></div>
+  </section>
+  <section id="board" class="screen qpage" hidden aria-labelledby="lbTitle">
+    <h1 class="qp-title" id="lbTitle">Leaderboard</h1>
+    <div class="lb-soon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14.5" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 9.3L6 3h4l2 4.2L14 3h4l-2.5 6.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11.6l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" fill="currentColor"/></svg><b>Coming soon</b><span>See how your dives stack up against everyone else.</span></div>
+  </section>
   <section id="result" class="screen" hidden aria-labelledby="resTitle">
     <div class="pagebar"><button class="back" id="resBack" type="button">‹ Dashboard</button></div>
     <header class="res-head">
@@ -2105,12 +2159,14 @@ const prettyDay = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-NZ', 
 
 // Pages: the dashboard (#home), a dive (#daily or #play) and the wrap-up (#results). Each is its own page:
 // a short fade, then the new page from the top, with the ocean and sub placed fresh (no gliding between pages).
-const PAGE_TITLE = { home: 'Trench Dive', dive: 'Dive · Trench Dive', result: 'Results · Trench Dive' };
+const PAGE_TITLE = { quests: 'Quests · Trench Dive', board: 'Leaderboard · Trench Dive', home: 'Trench Dive', dive: 'Dive · Trench Dive', result: 'Results · Trench Dive' };
 let veilT = 0;
+const SCREENS = ['home', 'dive', 'result', 'quests', 'board'];
 function show(id, opts) {
-  const cur = ['home', 'dive', 'result'].find(x => !$(x).hidden);
+  const cur = SCREENS.find(x => !$(x).hidden);
   const swap = () => {
-    for (const x of ['home', 'dive', 'result']) $(x).hidden = x !== id;
+    for (const x of SCREENS) $(x).hidden = x !== id;
+    navState(id);
     const sc = document.scrollingElement; document.body.scrollTop = 0; if (sc) sc.scrollTop = 0;
     document.title = PAGE_TITLE[id] || 'Trench Dive';
     if (id === 'home') layoutHome();
@@ -2128,7 +2184,7 @@ function show(id, opts) {
   // no screen wipe: the camera and sub glide to where the new page needs them (rising or sinking)
   const settle = () => requestAnimationFrame(() => {
     if (id === 'dive') scene.target = S.depth * SCENE_K;
-    if (id === 'home') scene.target = 0;
+    if (id === 'home' || id === 'quests' || id === 'board') scene.target = 0;
     if (id === 'result' && opts && opts.descend) scene.target = (S.wrapDepth || 0) * SCENE_K; // sink to the depth that dive reached
     scene.bubbles.length = Math.min(scene.bubbles.length, 20);
     let dur = 0;
@@ -2160,6 +2216,8 @@ function onRoute() {
   if (t === 'daily') { if (!(inDive && S.mode === 'daily')) startDaily(true); }
   else if (t === 'play') { if (!(!$('dive').hidden && S.mode === 'unl')) startDive(true); }
   else if (t === 'results') { if ($('result').hidden) { if (S.wrap) showWrap(S.wrap.mode, S.wrap.day, null, true); else if (save.daily[nzDate()] && save.daily[nzDate()].done) showWrap('daily', nzDate(), null, true); else goHome(false); } }
+  else if (t === 'quests') openQuests(false);
+  else if (t === 'board') openBoard(false);
   else goHome(false);
 }
 
@@ -2217,6 +2275,7 @@ function startDaily(fromRoute) {
   beginDive();
 }
 function beginDive() {
+  questPlayDay();
   S.diveStart = Date.now(); // reports made from now on belong to this dive
   if (!tutSeen() && !(window.__FAST && !window.__TUT)) openTut(true);
   $('quitBtn').hidden = S.mode === 'daily'; // a Daily Dive is one go, start to finish
@@ -2438,6 +2497,7 @@ function finishPrompt(r) {
   achAnswer(q, r);
   const t = r.tier;
   if (t >= 0) SFX.tier(t); else if (r.why === 'time') SFX.timeUp(); else SFX.pass();
+  questEvt('answer', { tier: t });
   $('qCard').classList.add('gone');
   const stage = $('reveal'); stage.style.setProperty('--c', t >= 0 ? TIER_HEX[t] : '#ffffff'); $('nextBtn').style.setProperty('--c', t >= 0 ? TIER_HEX[t] : '#9bb3c0');
   $('badgeName').textContent = t >= 0 ? TIER_NAMES[t] : (r.why === 'time' ? 'Time’s up' : 'Passed');
@@ -2587,6 +2647,7 @@ function finishDive() {
   store.set(save);
   achDive(pts, depth);
   route('results', true); // the results replace the dive in history, so Back goes to the dashboard
+  questEvt('dive', { pts, depth, mode: S.mode, passes: S.results.filter(x => x.tier < 0).length });
   showWrap(S.mode, S.day, { pts, depth, newBest, had, prevBest });
   SFX.finish(pts / (TIER_PTS[5] * DIVE_QS), newBest && had);
 }
@@ -4595,6 +4656,81 @@ $('tutNext').addEventListener('click', () => { if (tutI < 3) tutShow(tutI + 1); 
 $('tutSkip').addEventListener('click', () => { if (tutI) tutShow(tutI - 1); else closeTut(); });
 $('tutAgain').addEventListener('click', () => { closeSettings(); openTut(false); });
 document.addEventListener('keydown', (e) => { if (!$('tutSheet').hidden) { if (e.key === 'Escape') { e.preventDefault(); closeTut(); } else if (e.key === 'ArrowRight') tutShow(Math.min(3, tutI + 1)); else if (e.key === 'ArrowLeft') tutShow(Math.max(0, tutI - 1)); } });
+
+
+// ---- v91: quests (3 daily quests, NZ-time reset, harder going down; a monthly quest point goal) and the bottom bar ----
+const QKEY = 'trenchdive.quests.v1';
+const QPOOL = [
+  [{ k: 'dive', t: 'Complete a dive', g: 1 }, { k: 'answers', t: 'Answer 15 prompts', g: 15 }, { k: 'points', t: 'Earn 300 points', g: 300 }, { k: 'school', t: 'Get 5 Schooler or rarer answers', g: 5 }, { k: 'daily', t: 'Complete the Daily Dive', g: 1 }],
+  [{ k: 'rare', t: 'Get 3 Rare answers', g: 3 }, { k: 'dive', t: 'Complete 3 dives', g: 3 }, { k: 'depthMax', t: 'Reach 3,000 m in one dive', g: 3000 }, { k: 'points', t: 'Earn 1,000 points', g: 1000 }, { k: 'school', t: 'Get 15 Schooler or rarer answers', g: 15 }],
+  [{ k: 'deep', t: 'Get 3 Deep Cuts', g: 3 }, { k: 'tt', t: 'Find a Trench Treasure', g: 1 }, { k: 'depthMax', t: 'Reach 5,000 m in one dive', g: 5000 }, { k: 'diveMax', t: 'Score 500 points in one dive', g: 500 }, { k: 'nopass', t: 'Finish a dive with no passes', g: 1 }, { k: 'clever', t: 'Get a Too Clever answer', g: 1 }]
+];
+const MQ_COL = ['#00a8e8', '#ff6f61', '#1fb5a5', '#3d6cf0', '#f58a1f', '#2f8fff', '#13c08a', '#8a4ff0', '#00a3a8', '#f4a020', '#14aab8', '#e2475a'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const qGet = () => { try { const v = JSON.parse(localStorage.getItem(QKEY)); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } };
+const qSet = (v) => { try { localStorage.setItem(QKEY, JSON.stringify(v)); } catch (e) {} };
+function questsFor(day) { const r = rng(hashStr('quests:' + day)); return QPOOL.map(pool => pool[Math.floor(r() * pool.length)]); }
+function qGoal(q, today) { // monthly goal from how much they play (always ends in zero)
+  const since = addDays(today, -30), days = new Set((q.play || []).concat(Object.keys(save.daily || {})).filter(d => d >= since && d <= today));
+  if (!(save.dives > 0) && !days.size && !(q.play || []).length) return 30; // brand new player
+  const n = days.size, m = today.slice(0, 7), prev = (k) => { const [y, mo] = m.split('-').map(Number), d = new Date(Date.UTC(y, mo - 1 - k, 1)); return d.toISOString().slice(0, 7); };
+  if (n >= 24 && q.hist && q.hist[prev(1)] && q.hist[prev(2)]) return 70;
+  return n >= 24 ? 60 : n >= 15 ? 50 : n >= 8 ? 40 : n >= 3 ? 30 : 20;
+}
+function qState() {
+  const q = qGet(), today = nzDate(), month = today.slice(0, 7);
+  if (q.month !== month) { if (q.month) { q.hist = q.hist || {}; q.hist[q.month] = (q.mpts || 0) >= (q.goal || 1e9); } q.month = month; q.goal = qGoal(q, today); q.mpts = 0; }
+  if (q.day !== today) { q.day = today; q.prog = [0, 0, 0]; q.done = [false, false, false]; }
+  return q;
+}
+function questPlayDay() { const q = qState(), d = nzDate(); q.play = (q.play || []).filter(x => x >= addDays(d, -60)); if (!q.play.includes(d)) q.play.push(d); qSet(q); }
+function questEvt(type, e) {
+  try {
+    const q = qState(), list = questsFor(q.day); let newly = 0;
+    list.forEach((qu, i) => {
+      if (q.done[i]) return; let v = q.prog[i] || 0;
+      if (type === 'answer') { const t = e.tier;
+        if (qu.k === 'answers' && t >= 0) v++; else if (qu.k === 'points' && t >= 0) v += TIER_PTS[t] || 0;
+        else if (qu.k === 'school' && t >= 2) v++; else if (qu.k === 'rare' && t >= 3) v++; else if (qu.k === 'deep' && t >= 4) v++;
+        else if (qu.k === 'tt' && t === 5) v++; else if (qu.k === 'clever' && t === 1) v++; }
+      else if (type === 'dive') {
+        if (qu.k === 'dive') v++; else if (qu.k === 'daily' && e.mode === 'daily') v = 1; else if (qu.k === 'depthMax') v = Math.max(v, e.depth || 0);
+        else if (qu.k === 'diveMax') v = Math.max(v, e.pts || 0); else if (qu.k === 'nopass' && e.passes === 0) v = 1; }
+      q.prog[i] = Math.min(v, qu.g);
+      if (q.prog[i] >= qu.g) { q.done[i] = true; q.mpts = (q.mpts || 0) + 1; newly++; }
+    });
+    if (newly) { q.unseen = true; try { SFX.ach(); } catch (er) {} }
+    qSet(q); paintQuestDot();
+  } catch (er) {}
+}
+const qTime = (ms) => { const h = Math.floor(ms / 3600000); return h >= 1 ? h + 'H' : Math.max(1, Math.ceil(ms / 60000)) + 'M'; };
+const QCHEST = (lvl, open) => { const c = ['#c98a4b', '#b9c6d3', '#ffc65a'][lvl], d = ['#7a4a22', '#6f7f8f', '#a87412'][lvl];
+  return '<svg viewBox="0 0 48 48" aria-hidden="true">' + (open ? '<path d="M8 20 L40 20 L36 8 L12 8 Z" fill="' + d + '"/><path d="M10 9 L38 9 L35 18 L13 18 Z" fill="' + c + '" opacity="0.6"/><circle cx="24" cy="15" r="4" fill="#fff4c2"/>' : '<path d="M8 22 C8 12 40 12 40 22 Z" fill="' + c + '" stroke="' + d + '" stroke-width="2"/>')
+    + '<rect x="8" y="21" width="32" height="20" rx="3" fill="' + c + '" stroke="' + d + '" stroke-width="2"/><rect x="8" y="27" width="32" height="4" fill="' + d + '" opacity="0.45"/><rect x="21" y="24" width="6" height="8" rx="1.5" fill="' + d + '"/>' + '</svg>'; };
+function renderQuests() {
+  const q = qState(); qSet(q); const today = q.day, [y, mo, d] = today.split('-').map(Number), dim = new Date(Date.UTC(y, mo, 0)).getUTCDate(), left = dim - d, ms = msToNzMidnight(Date.now());
+  const col = MQ_COL[mo - 1], pct = Math.min(100, (q.mpts || 0) / q.goal * 100);
+  $('mqBox').innerHTML = '<div class="mq" style="--mc:' + col + '">'
+    + '<svg class="mq-fish" viewBox="0 0 92 70" aria-hidden="true"><g fill="#fff"><path d="M18 30c10-12 32-12 42 0-10 12-32 12-42 0z" opacity="0.92"/><path d="M60 30l12-9v18z" opacity="0.92"/><circle cx="28" cy="28" r="2.4" fill="' + col + '"/><path d="M66 52c5-6 15-6 20 0-5 6-15 6-20 0z" opacity="0.55"/><path d="M86 52l6-4v8z" opacity="0.55"/></g><g fill="none" stroke="#fff" stroke-width="2" opacity="0.7"><circle cx="12" cy="14" r="3"/><circle cx="6" cy="4" r="2"/><circle cx="48" cy="58" r="2.5"/></g></svg>'
+    + '<svg class="mq-waves" viewBox="0 0 400 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 38 C60 22 110 52 170 38 S290 22 400 36 V70 H0z" fill="#fff" opacity="0.14"/><path d="M0 52 C70 40 130 64 200 52 S320 40 400 52 V70 H0z" fill="#fff" opacity="0.14"/></svg>'
+    + '<div class="mq-title">' + MONTHS[mo - 1] + ' Quest</div>'
+    + '<div class="mq-time"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 7v5.2l3.4 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' + (left >= 1 ? (left + 1) + ' DAYS' : qTime(ms)) + '</div>'
+    + '<div class="mq-card"><div class="mq-obj">Earn ' + q.goal + ' Quest Points</div><div class="qbar"><i data-w="' + pct.toFixed(1) + '"></i><span>' + Math.min(q.mpts || 0, q.goal) + ' / ' + q.goal + '</span></div></div></div>';
+  $('dqTimer').textContent = qTime(ms);
+  $('dqList').innerHTML = questsFor(today).map((qu, i) => { const v = q.prog[i] || 0, done = q.done[i], big = qu.g >= 1000;
+    return '<div class="dq' + (done ? ' done' : '') + '"><div class="dq-l"><div class="dq-t">' + qu.t + '</div><div class="qbar"><i data-w="' + (v / qu.g * 100).toFixed(1) + '"></i><span>' + (big ? fmt(v) : v) + ' / ' + (big ? fmt(qu.g) : qu.g) + '</span></div></div><div class="dq-chest">' + QCHEST(i, done) + '</div></div>'; }).join('');
+  requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#quests .qbar i').forEach(el => { el.style.width = el.dataset.w + '%'; })));
+  if (q.unseen) { q.unseen = false; qSet(q); } paintQuestDot();
+}
+function paintQuestDot() { try { $('questDot').hidden = !qGet().unseen; } catch (e) {} }
+function navState(id) { document.body.classList.toggle('nav-on', id === 'home' || id === 'quests' || id === 'board'); document.querySelectorAll('#botnav button').forEach(b => b.classList.toggle('on', b.dataset.go === id)); }
+let qTick = 0;
+function openQuests(push) { if (!$('dive').hidden) abandonDive(); if (push !== false) route('quests'); renderQuests(); show('quests'); clearInterval(qTick); qTick = setInterval(() => { if (!$('quests').hidden) renderQuests(); else clearInterval(qTick); }, 30000); }
+function openBoard(push) { if (!$('dive').hidden) abandonDive(); if (push !== false) route('board'); show('board'); }
+$('botnav').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; const g = b.dataset.go;
+  if (g === 'home') { if ($('home').hidden) goHome(); } else if (g === 'quests') { if ($('quests').hidden) openQuests(); } else if (g === 'board') { if ($('board').hidden) openBoard(); } });
+
+setTimeout(() => { navState(SCREENS.find(x => !$(x).hidden) || 'home'); paintQuestDot(); }, 0);
 
 // ---- Auto-tier helper: list is ordered from most to least commonly named; "!Item" = Too Clever ----
 function A(id, cat, prompt, list) { add(id, cat, prompt, list); }
