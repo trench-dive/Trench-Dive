@@ -3708,8 +3708,9 @@ function achNext() {
   $('achToasts').append(el); SFX.ach(); void el.offsetWidth; requestAnimationFrame(() => el.classList.add('in'));
   setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.remove(); setTimeout(achNext, 220); }, 600); }, 4800);
 }
-// v116: mastering an achievement (every level) pays a few coins, claimed on the Achievements page. 3 coins per level; Trench Master pays 25.
-const masterCoins = (x) => (x.id === 'master' ? 25 : 3 * x.lv.length);
+// v116: mastering an achievement (every level) pays a few coins, claimed on the Achievements page. 20 coins for a one-level achievement, +5 per extra level (max 40); Touch the Floor and Abyssal Visitor pay 100; Trench Master and Trick or Treat 50.
+const MASTER_COINS = { floor: 100, abyssal: 100, master: 50, hwquest: 50 }; // the two that need a perfect 7-Trench-Treasure dive pay 100
+const masterCoins = (x) => MASTER_COINS[x.id] || Math.min(50, 20 + 5 * (x.lv.length - 1)); // otherwise 20 (one level) up to 40 (five levels)
 const achMastered = (x) => (ACHS.lvl[x.id] || 0) >= x.lv.length;
 const achToClaim = () => ACH.filter(x => achMastered(x) && !(ACHS.claimed || {})[x.id]);
 function achClaim(id) { const x = ACH.find(a => a.id === id); if (!x || !achMastered(x) || (ACHS.claimed || {})[id]) return 0; (ACHS.claimed || (ACHS.claimed = {}))[id] = 1; achSave(); const q = qState(); q.coins = (q.coins || 0) + masterCoins(x); qSet(q); paintCoins(); paintAchDot(); return masterCoins(x); }
