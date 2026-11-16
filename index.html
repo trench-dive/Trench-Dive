@@ -528,7 +528,7 @@ html.calm .hd-ic, html.calm .hd-go { animation: none; }
 .promo-go { appearance: none; padding: 0 16px; border: 0; border-radius: 12px; cursor: pointer; font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: #3b2400; background: linear-gradient(180deg, #ffd77a, #ffb43a); }
 .promo.shake { animation: shShake 0.45s; }
 .promo.pop { animation: shHit 0.5s cubic-bezier(0.2, 1.6, 0.4, 1); }
-.promo-msg { min-height: 1.3em; margin: 6px 2px 2px; font-size: 0.82rem; font-weight: 700; color: var(--ink-soft); }
+.promo-msg { min-height: 1.3em; margin: 14px 4px 4px; font-size: 0.82rem; font-weight: 700; color: var(--ink-soft); }
 .promo-msg.ok { color: #7fe3a0; }
 .promo-msg.no { color: #ff9a8a; }
 .subflow { position: fixed; inset: 0; z-index: 85; overflow: hidden; color: var(--foam); background: radial-gradient(120% 90% at 50% 0%, #123a63 0%, #0a2a4c 30%, #0A192F 62%, #050d1b 100%); }
@@ -1181,11 +1181,11 @@ button.res-row[aria-expanded="true"] .rq::after { content: " ▴"; }
 .sh-gift svg { width: 15px; height: 15px; } .sh-gift:hover { background: rgba(160, 228, 255, 0.14); color: var(--foam); border-color: rgba(160, 228, 255, 0.7); } .sh-gift:focus-visible { outline: 3px solid var(--foam); outline-offset: 2px; }
 .sk-gift { margin-top: 6px; }
 /* achievements: claim coins for a mastered one */
-.ac-claim, .ac-got { grid-column: 1 / -1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; margin-top: 9px; padding: 8px 12px; border-radius: 12px; font: 800 0.88rem/1 var(--font-display); }
-.ac-claim { appearance: none; border: 0; cursor: pointer; color: #3b2400; background: linear-gradient(180deg, #ffd77a, #ffb43a); box-shadow: 0 6px 16px rgba(255, 170, 40, 0.3); animation: acPulse 1.8s ease-in-out infinite; }
-.ac-claim:active { transform: scale(0.97); } .ac-claim .tdcoin, .ac-got .tdcoin { width: 20px; height: 20px; }
-.ac-got { color: #bfe6cf; background: rgba(120, 220, 170, 0.1); box-shadow: inset 0 0 0 1px rgba(120, 220, 170, 0.3); font-size: 0.8rem; } .ac-got i { font-style: normal; } .ac-got.pop { animation: shBump 0.5s cubic-bezier(0.2, 1.6, 0.4, 1); }
-@keyframes acPulse { 0%, 100% { box-shadow: 0 6px 16px rgba(255, 170, 40, 0.3); } 50% { box-shadow: 0 6px 24px rgba(255, 190, 70, 0.62); } }
+.ac-claim, .ac-got { flex: none; display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 2px 9px 2px 6px; border-radius: 99px; font: 800 0.74rem/1.4 var(--font-display); }
+.ac-claim { appearance: none; cursor: pointer; color: #fff; background: color-mix(in srgb, var(--c) 18%, transparent); border: 1px solid color-mix(in srgb, var(--c) 75%, transparent); box-shadow: 0 0 10px color-mix(in srgb, var(--c) 28%, transparent); transition: background 0.15s; }
+.ac-claim:hover { background: color-mix(in srgb, var(--c) 32%, transparent); } .ac-claim:active { transform: scale(0.96); } .ac-claim:focus-visible { outline: 2px solid var(--foam); outline-offset: 2px; }
+.ac-claim .tdcoin, .ac-got .tdcoin { width: 14px; height: 14px; }
+.ac-got { color: var(--ink-soft); font-weight: 700; padding: 2px 4px; } .ac-got i { font-style: normal; } .ac-got.pop { animation: shBump 0.5s cubic-bezier(0.2, 1.6, 0.4, 1); color: #fff; }
 /* gifts, rescues, weekly award, notices, sign-up offer: they all live in the generic sheet */
 .gf-card, .wk-card { display: grid; gap: 12px; text-align: center; justify-items: center; }
 .gf-ribbon { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 99px; font: 900 0.74rem/1 var(--font-body, inherit); letter-spacing: 0.18em; text-transform: uppercase; color: #3b2400; background: linear-gradient(90deg, #ffd77a, #ffb43a); box-shadow: 0 6px 18px rgba(255, 170, 40, 0.3); }
@@ -3708,8 +3708,8 @@ function achNext() {
   $('achToasts').append(el); SFX.ach(); void el.offsetWidth; requestAnimationFrame(() => el.classList.add('in'));
   setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.remove(); setTimeout(achNext, 220); }, 600); }, 4800);
 }
-// v116: mastering an achievement (every level) pays coins, claimed on the Achievements page. 20 coins per level (5 levels = 100); Trench Master pays 250.
-const masterCoins = (x) => (x.id === 'master' ? 250 : 20 * x.lv.length);
+// v116: mastering an achievement (every level) pays a few coins, claimed on the Achievements page. 3 coins per level; Trench Master pays 25.
+const masterCoins = (x) => (x.id === 'master' ? 25 : 3 * x.lv.length);
 const achMastered = (x) => (ACHS.lvl[x.id] || 0) >= x.lv.length;
 const achToClaim = () => ACH.filter(x => achMastered(x) && !(ACHS.claimed || {})[x.id]);
 function achClaim(id) { const x = ACH.find(a => a.id === id); if (!x || !achMastered(x) || (ACHS.claimed || {})[id]) return 0; (ACHS.claimed || (ACHS.claimed = {}))[id] = 1; achSave(); const q = qState(); q.coins = (q.coins || 0) + masterCoins(x); qSet(q); paintCoins(); paintAchDot(); return masterCoins(x); }
@@ -3728,8 +3728,8 @@ function renderAch() {
     const frac = done ? 1 : clamp((v - prev) / (next - prev), 0, 1);
     c.innerHTML = '<div class="ac-ic">' + achIcon(x) + '</div><div class="ac-b"><div class="ac-top"><b>' + x.name + (x.id === 'hwquest' ? ' <span class="ac-lim">LIMITED</span>' : '') + (l && max > 1 ? ' <span class="ac-lv" style="color:var(--c);font-size:.8em">' + ROMAN[l - 1] + '</span>' : '') + '</b>' + pips + '</div>'
       + '<span class="ac-d">' + x.desc(done ? x.lv[max - 1] : next) + '</span>'
-      + (done ? ((ACHS.claimed || {})[x.id] ? '<span class="ac-got">' + COIN_SVG + '<i>+' + masterCoins(x) + ' coins claimed</i></span>' : '<button type="button" class="ac-claim" data-claim="' + x.id + '">' + COIN_SVG + '<span>Claim ' + masterCoins(x) + ' coins</span></button>') : '')
-      + '<div class="ac-row"><div class="ac-bar"><i data-w="' + (frac * 100).toFixed(1) + '"></i></div><span class="ac-n">' + (done ? (max > 1 ? LV_NAME[max - 1] + ' · complete' : 'Complete') : fmt(Math.min(v, next)) + ' / ' + fmt(next) + (x.unit || '')) + '</span></div></div>';
+      + '<div class="ac-row"><div class="ac-bar"><i data-w="' + (frac * 100).toFixed(1) + '"></i></div><span class="ac-n">' + (done ? (max > 1 ? LV_NAME[max - 1] + ' · complete' : 'Complete') : fmt(Math.min(v, next)) + ' / ' + fmt(next) + (x.unit || '')) + '</span>'
+      + (done ? ((ACHS.claimed || {})[x.id] ? '<span class="ac-got">' + COIN_SVG + '<i>+' + masterCoins(x) + '</i></span>' : '<button type="button" class="ac-claim" data-claim="' + x.id + '" aria-label="Claim ' + masterCoins(x) + ' coins for mastering ' + x.name + '">' + COIN_SVG + '<span>+' + masterCoins(x) + '</span></button>') : '') + '</div></div>';
     c.setAttribute('aria-label', x.name + (l ? ', level ' + l + ' of ' + max : ', not yet earned') + '. ' + x.desc(done ? x.lv[max - 1] : next));
     g.append(c);
   }
@@ -3842,7 +3842,7 @@ $('catSheet').addEventListener('click', (e) => { if (e.target === $('catSheet'))
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('catSheet').hidden) { e.preventDefault(); closeCats(); } });
 $('achGrid').addEventListener('click', (e) => { // v116: claim the coins for a mastered achievement
   const b = e.target.closest('[data-claim]'); if (!b) return; const n = achClaim(b.dataset.claim); if (!n) return; try { SFX.ach(); } catch (er) {}
-  b.outerHTML = '<span class="ac-got pop">' + COIN_SVG + '<i>+' + n + ' coins claimed</i></span>'; restart($('coinPill'), 'bump'); try { shopPop($('achGrid').querySelector('.ac-got.pop')); } catch (er) {}
+  b.outerHTML = '<span class="ac-got pop">' + COIN_SVG + '<i>+' + n + '</i></span>'; restart($('coinPill'), 'bump'); try { shopPop($('achGrid').querySelector('.ac-got.pop')); } catch (er) {}
 });
 function openAch() { renderAch(); ACHS.unseen = false; achSave(); paintAchDot(); const w = $('achSheet'); w.hidden = false; requestAnimationFrame(() => w.classList.add('open')); $('achX').focus(); }
 function closeAch() { const w = $('achSheet'); w.classList.remove('open'); w.hidden = true; $('achBtn').focus(); }
@@ -6131,8 +6131,9 @@ function promoRedeem(raw) {
   return { ok: true, msg: p.skin ? 'Code accepted! A new submarine is on its way.' : p.swaps ? 'Code accepted! +' + p.swaps + (p.swaps === 1 ? ' Prompt Swap' : ' Prompt Swaps') + ' and a chest.' : 'Code accepted!', chest: !!p.chest, hchest: !!p.hchest, skin: !!p.skin };
 }
 $('promoForm').addEventListener('submit', (e) => {
-  e.preventDefault(); const before = qState().coins || 0, r = promoRedeem($('promoIn').value), m = $('promoMsg'); m.textContent = r.msg; m.className = 'promo-msg ' + (r.ok ? 'ok' : 'no'); restart($('promoForm'), r.ok ? 'pop' : 'shake');
-  if (!r.ok && /didn’t work/.test(r.msg) && typeof exclusiveRedeem === 'function') { exclusiveRedeem($('promoIn').value).then(x => { if (!x) return; m.textContent = x.msg; m.className = 'promo-msg ' + (x.ok ? 'ok' : 'no'); restart($('promoForm'), x.ok ? 'pop' : 'shake'); if (x.ok) { $('promoIn').value = ''; try { SFX.ach(); } catch (er) {} } }); } // anything else: maybe a one-account server code
+  e.preventDefault(); const before = qState().coins || 0, r = promoRedeem($('promoIn').value), m = $('promoMsg'), maybeServer = !r.ok && /didn’t work/.test(r.msg) && typeof exclusiveRedeem === 'function';
+  if (maybeServer) { m.textContent = 'Checking…'; m.className = 'promo-msg'; } else { m.textContent = r.msg; m.className = 'promo-msg ' + (r.ok ? 'ok' : 'no'); restart($('promoForm'), r.ok ? 'pop' : 'shake'); }
+  if (maybeServer) { exclusiveRedeem($('promoIn').value).then(x => { const f = x || r; m.textContent = f.msg; m.className = 'promo-msg ' + (f.ok ? 'ok' : 'no'); restart($('promoForm'), f.ok ? 'pop' : 'shake'); if (f.ok) { $('promoIn').value = ''; try { SFX.ach(); } catch (er) {} } }).catch(() => { m.textContent = r.msg; m.className = 'promo-msg no'; }); } // anything else: maybe a one-account server code; the answer waits for it so a good code never flashes "didn’t work" first
   if (r.ok && r.coins) { $('promoIn').value = ''; try { SFX.ach(); } catch (er) {} qfCount($('shopCoins'), before, qState().coins || 0, 900); restart($('coinPill'), 'bump'); restart(document.querySelector('#shopSheet .shop-bal'), 'bump'); }
   if (r.ok && r.fz) { $('promoIn').value = ''; try { SFX.ach(); } catch (er) {} setTimeout(() => { closeShop(); setTimeout(() => { try { fzNoticeShow(); } catch (er) {} }, 250); }, 1000); }
   if (r.ok && r.hchest) { $('promoIn').value = ''; try { SFX.ach(); } catch (er) {} setTimeout(() => { closeShop(); setTimeout(hlChest, 250); }, 700); }
@@ -8879,52 +8880,44 @@ function hsMarlin(c, L, fish) { // the marlin from the dive scene, as a silhouet
 // ---- v116: the Deep-Sea Angler banner (one account only). A dark trench, marine snow, rising bubbles, and an anglerfish whose glowing lure sways in the black water. Animated; drawAt(t) paints one still frame.
 function hsAnglerScene(c, W, H, u, tall, t) {
   const R = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }; // fixed pseudo-random numbers: the same scatter every frame
-  // faint light from far above
-  for (let k = 0; k < 3; k++) { const x0 = W * (0.15 + k * 0.33) + Math.sin(t * 0.25 + k * 2) * 14, gr = c.createLinearGradient(0, 0, 0, H * 0.7); gr.addColorStop(0, 'rgba(120,210,255,0.07)'); gr.addColorStop(1, 'rgba(120,210,255,0)'); c.fillStyle = gr; c.beginPath(); c.moveTo(x0 - 6, 0); c.lineTo(x0 + 6, 0); c.lineTo(x0 + 40 + k * 8, H * 0.7); c.lineTo(x0 - 40, H * 0.7); c.closePath(); c.fill(); }
-  // marine snow drifting down, and far-off glints
-  for (let i = 0; i < 34; i++) { const sp = 6 + R(i + 1) * 9, x = (R(i + 2) * W + Math.sin(t * 0.4 + i) * 6 + t * 1.5) % W, y = (R(i + 3) * H + t * sp) % H, r = Math.max(0.6, (0.5 + R(i + 4) * 1.3) * Math.sqrt(u)); c.fillStyle = 'rgba(190,235,255,' + (0.12 + R(i + 5) * 0.28).toFixed(2) + ')'; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.fill(); }
-  for (let i = 0; i < 6; i++) { const x = R(i + 40) * W, y = R(i + 50) * H * 0.75, a = 0.25 + 0.75 * Math.max(0, Math.sin(t * (0.8 + R(i + 60)) + i * 3)) ** 3; c.fillStyle = 'rgba(80,240,255,' + (a * 0.55).toFixed(2) + ')'; c.beginPath(); c.arc(x, y, Math.max(0.8, 1.5 * Math.sqrt(u)), 0, 6.28); c.fill(); hsHalo2(c, x, y, 9 * Math.sqrt(u), a * 0.35); }
-  // the angler: lower right, mouth pointing left
-  const L = Math.min(W * (tall ? 0.38 : 0.4), H * (tall ? 0.34 : 0.9), 185), k = L / 150, ax = W * (tall ? 0.8 : 0.78), ay = H * (tall ? 0.19 : 0.56) + Math.sin(t * 0.9) * 3 * k; // top right, beside the picture, so the name and buttons stay clear
-  const lx = -73, ly = -58 + Math.sin(t * 1.3) * 3, pulse = 0.78 + 0.22 * Math.sin(t * 2.4); // the lure, in the angler's own space
-  c.save(); c.translate(ax, ay); c.rotate(Math.sin(t * 0.5) * 0.03); c.scale(k, k);
-  // the lure's light on the water
-  const lg = c.createRadialGradient(lx, ly, 2, lx, ly, 120); lg.addColorStop(0, 'rgba(90,245,255,' + (0.3 * pulse).toFixed(2) + ')'); lg.addColorStop(0.4, 'rgba(40,190,230,' + (0.13 * pulse).toFixed(2) + ')'); lg.addColorStop(1, 'rgba(40,190,230,0)'); c.fillStyle = lg; c.beginPath(); c.arc(lx, ly, 120, 0, 6.28); c.fill();
-  // tail and fins (they wave)
-  const wv = Math.sin(t * 2.2), wv2 = Math.sin(t * 2.2 - 1);
-  c.fillStyle = '#0a2230'; c.strokeStyle = 'rgba(70,200,230,0.35)'; c.lineWidth = 0.8;
-  c.beginPath(); c.moveTo(56, -4); c.quadraticCurveTo(74, -4 + wv * 4, 92 + wv * 3, -26 + wv * 7); c.quadraticCurveTo(86 + wv * 2, 0, 92 + wv * 3, 26 + wv * 7); c.quadraticCurveTo(74, 6 + wv * 4, 56, 8); c.closePath(); c.fill(); c.stroke();
-  c.beginPath(); c.moveTo(14, -37); c.quadraticCurveTo(26 + wv2 * 3, -58, 44 + wv2 * 5, -44); c.quadraticCurveTo(36, -38, 36, -30); c.closePath(); c.fill(); c.stroke();
-  c.save(); c.translate(-6, 16); c.rotate(0.5 + wv2 * 0.35); c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(10, 8, 26, 22); c.quadraticCurveTo(10, 24, -2, 8); c.closePath(); c.fill(); c.stroke(); c.restore();
-  // body
-  const bg = c.createRadialGradient(-34, -30, 4, 10, 6, 88); bg.addColorStop(0, '#46a0b8'); bg.addColorStop(0.3, '#16465a'); bg.addColorStop(1, '#040d14');
-  c.fillStyle = bg; c.beginPath(); c.moveTo(-50, -4); c.bezierCurveTo(-54, -32, -22, -46, 8, -40); c.bezierCurveTo(34, -36, 52, -20, 60, -4); c.lineTo(58, 8); c.bezierCurveTo(48, 30, 20, 42, -8, 40); c.bezierCurveTo(-32, 38, -50, 28, -52, 12); c.closePath(); c.fill();
-  c.strokeStyle = 'rgba(90,225,255,' + (0.3 + 0.2 * pulse).toFixed(2) + ')'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(-50, -6); c.bezierCurveTo(-54, -32, -22, -46, 8, -40); c.bezierCurveTo(34, -36, 52, -20, 60, -4); c.stroke(); // rim light where the lure shines
-  // bumpy skin and a row of glowing spots along the belly
-  c.fillStyle = 'rgba(0,0,0,0.28)'; for (let i = 0; i < 16; i++) { const a = R(i + 80) * 6.28, d = 12 + R(i + 90) * 26; c.beginPath(); c.arc(10 + Math.cos(a) * d * 1.3, -4 + Math.sin(a) * d * 0.7, 1.4 + R(i + 100) * 2, 0, 6.28); c.fill(); }
-  for (let i = 0; i < 8; i++) { const x = -26 + i * 10, y = 31 - Math.sin(i / 7 * 3.14) * 4 - (i > 4 ? (i - 4) * 2.5 : 0); c.fillStyle = 'rgba(110,250,255,' + (0.25 + 0.5 * Math.max(0, Math.sin(t * 1.6 + i * 0.9))).toFixed(2) + ')'; c.beginPath(); c.arc(x, y, 1.5, 0, 6.28); c.fill(); }
-  // the mouth: an open maw, lower jaw jutting out, uneven needle teeth that interlock
-  const mg = c.createLinearGradient(-50, 0, -6, 14); mg.addColorStop(0, '#2a0a12'); mg.addColorStop(1, '#010305');
-  c.fillStyle = mg; c.beginPath(); c.moveTo(-50, -3); c.bezierCurveTo(-36, 0, -20, 4, -4, 10); c.lineTo(-8, 21); c.bezierCurveTo(-26, 26, -44, 24, -56, 18); c.lineTo(-52, 8); c.closePath(); c.fill();
-  const fang = (x, y, dy, w, bend) => { c.fillStyle = 'rgba(236,249,255,0.96)'; c.beginPath(); c.moveTo(x - w, y); c.quadraticCurveTo(x + bend * 0.3, y + dy * 0.55, x + bend, y + dy); c.quadraticCurveTo(x + w * 0.6 + bend * 0.5, y + dy * 0.5, x + w, y); c.closePath(); c.fill(); c.fillStyle = 'rgba(120,200,220,0.35)'; c.beginPath(); c.moveTo(x, y); c.lineTo(x + w, y); c.lineTo(x + bend * 0.6, y + dy * 0.6); c.closePath(); c.fill(); };
-  [[-48, 7, 1.7, 2], [-43, 5, 1.2, 1], [-38.5, 9, 1.5, 2], [-33, 4, 1.2, 1], [-28.5, 8, 1.4, 2], [-23, 4.5, 1.1, 1], [-18, 6.5, 1.3, 1.5], [-13, 4, 1, 1]].forEach(([x, dy, w, bd]) => fang(x, -3 + (x + 50) * 0.18, dy + 1.5, w, bd));
-  [[-54, 11, 1.8, -2], [-48.5, 6, 1.3, -1], [-43, 10, 1.6, -2], [-37.5, 5, 1.2, -1], [-32, 9, 1.5, -1.5], [-26.5, 5, 1.2, -1], [-21, 7, 1.3, -1], [-15.5, 4, 1, -0.5]].forEach(([x, dy, w, bd]) => fang(x, 19 + (x + 54) * 0.06, -(dy + 1.5), w, bd));
-  c.strokeStyle = 'rgba(140,235,255,0.5)'; c.lineWidth = 1; c.beginPath(); c.moveTo(-50, -3); c.bezierCurveTo(-36, 0, -20, 4, -4, 10); c.stroke(); // the upper lip catches the light
-  // eye
-  const eg = c.createRadialGradient(-27, -20, 0, -27, -20, 14); eg.addColorStop(0, 'rgba(150,250,255,0.55)'); eg.addColorStop(1, 'rgba(150,250,255,0)'); c.fillStyle = eg; c.beginPath(); c.arc(-27, -20, 14, 0, 6.28); c.fill();
-  c.fillStyle = '#e6fbff'; c.beginPath(); c.arc(-27, -20, 6.4, 0, 6.28); c.fill(); c.fillStyle = '#031017'; c.beginPath(); c.arc(-28.4, -19.4, 3.6, 0, 6.28); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.arc(-29.6, -21, 1.2, 0, 6.28); c.fill();
+  // almost no light down here: a little marine snow and a few far-off sparks
+  for (let i = 0; i < 20; i++) { const sp = 4 + R(i + 1) * 6, x = (R(i + 2) * W + Math.sin(t * 0.3 + i) * 5 + t * 1.1) % W, y = (R(i + 3) * H + t * sp) % H, r = Math.max(0.5, (0.45 + R(i + 4) * 1.0) * Math.sqrt(u)); c.fillStyle = 'rgba(150,205,225,' + (0.05 + R(i + 5) * 0.12).toFixed(2) + ')'; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.fill(); }
+  for (let i = 0; i < 3; i++) { const x = R(i + 40) * W, y = R(i + 50) * H * 0.7, a = Math.max(0, Math.sin(t * (0.5 + R(i + 60) * 0.5) + i * 3)) ** 3; c.fillStyle = 'rgba(80,200,220,' + (a * 0.3).toFixed(2) + ')'; c.beginPath(); c.arc(x, y, Math.max(0.7, 1.2 * Math.sqrt(u)), 0, 6.28); c.fill(); }
+  // the angler: top right, facing the picture, half hidden in the black water
+  const L = Math.min(W * (tall ? 0.4 : 0.42), H * (tall ? 0.36 : 0.95), 195), k = L / 150, ax = W * (tall ? 0.84 : 0.8), ay = H * (tall ? 0.19 : 0.56) + Math.sin(t * 0.45) * 2.5 * k;
+  const lx = -73, ly = -58 + Math.sin(t * 0.7) * 3.5, pulse = 0.82 + 0.18 * Math.sin(t * 1.1); // the lure, in the angler's own space (it drifts slowly)
+  c.save(); c.translate(ax, ay); c.rotate(Math.sin(t * 0.3) * 0.02); c.scale(k, k);
+  const lg = c.createRadialGradient(lx, ly, 2, lx, ly, 105); lg.addColorStop(0, 'rgba(120,225,235,' + (0.22 * pulse).toFixed(3) + ')'); lg.addColorStop(0.45, 'rgba(50,150,175,' + (0.07 * pulse).toFixed(3) + ')'); lg.addColorStop(1, 'rgba(50,150,175,0)'); c.fillStyle = lg; c.beginPath(); c.arc(lx, ly, 105, 0, 6.28); c.fill();
+  // tail and fins: black shapes that barely move
+  const wv = Math.sin(t * 0.9), wv2 = Math.sin(t * 0.9 - 1);
+  c.fillStyle = '#04090d'; c.strokeStyle = 'rgba(70,150,170,0.14)'; c.lineWidth = 0.7;
+  c.beginPath(); c.moveTo(56, -4); c.quadraticCurveTo(74, -4 + wv * 2, 92 + wv * 2, -26 + wv * 4); c.quadraticCurveTo(86 + wv, 0, 92 + wv * 2, 26 + wv * 4); c.quadraticCurveTo(74, 6 + wv * 2, 56, 8); c.closePath(); c.fill(); c.stroke();
+  c.beginPath(); c.moveTo(14, -37); c.quadraticCurveTo(26 + wv2 * 2, -58, 44 + wv2 * 3, -44); c.quadraticCurveTo(36, -38, 36, -30); c.closePath(); c.fill(); c.stroke();
+  c.save(); c.translate(-6, 16); c.rotate(0.5 + wv2 * 0.2); c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(10, 8, 26, 22); c.quadraticCurveTo(10, 24, -2, 8); c.closePath(); c.fill(); c.stroke(); c.restore();
+  // body: only the snout and brow, the side nearest the lure, catch any light
+  const bg = c.createRadialGradient(-42, -26, 2, 6, 6, 92); bg.addColorStop(0, '#1d4352'); bg.addColorStop(0.22, '#0c212b'); bg.addColorStop(0.6, '#050e14'); bg.addColorStop(1, '#010305');
+  const body = () => { c.beginPath(); c.moveTo(-50, -4); c.bezierCurveTo(-54, -32, -22, -46, 8, -40); c.bezierCurveTo(34, -36, 52, -20, 60, -4); c.lineTo(58, 8); c.bezierCurveTo(48, 30, 20, 42, -8, 40); c.bezierCurveTo(-32, 38, -50, 28, -52, 12); c.closePath(); };
+  c.fillStyle = bg; body(); c.fill();
+  c.strokeStyle = 'rgba(100,190,210,' + (0.16 + 0.1 * pulse).toFixed(2) + ')'; c.lineWidth = 1; c.beginPath(); c.moveTo(-50, -6); c.bezierCurveTo(-54, -32, -22, -46, -2, -41); c.stroke();
+  c.fillStyle = 'rgba(0,0,0,0.35)'; for (let n = 0; n < 9; n++) { const a = R(n + 80) * 6.28, d = 14 + R(n + 90) * 24; c.beginPath(); c.arc(14 + Math.cos(a) * d * 1.3, -2 + Math.sin(a) * d * 0.7, 1.2 + R(n + 100) * 1.6, 0, 6.28); c.fill(); }
+  // the mouth: a flat, bored line; the lower jaw juts out and its crooked teeth show over the lip
+  c.strokeStyle = 'rgba(2,5,8,0.95)'; c.lineWidth = 2; c.beginPath(); c.moveTo(-51, 6); c.bezierCurveTo(-40, 10, -22, 14, -4, 12); c.stroke();
+  const fang = (x, y, dy, w, bend, a) => { c.fillStyle = 'rgba(200,225,232,' + a + ')'; c.beginPath(); c.moveTo(x - w, y); c.quadraticCurveTo(x + bend * 0.3, y + dy * 0.55, x + bend, y + dy); c.quadraticCurveTo(x + w * 0.6 + bend * 0.5, y + dy * 0.5, x + w, y); c.closePath(); c.fill(); };
+  [[-52, 8, 1.5, 1.5], [-46.5, 5, 1.1, 1], [-41, 7.5, 1.3, 1.5], [-35.5, 4, 1, 0.5], [-30, 6, 1.2, 1], [-24.5, 3.5, 0.9, 0.5], [-19, 5, 1.1, 1]].forEach(([x, dy, w, bd], n) => fang(x, 9.5 + (x + 52) * 0.1, -dy, w, bd, (0.28 + 0.2 * Math.max(0, 1 - (x + 52) / 30)).toFixed(2))); // teeth point up from the lower jaw; the nearer ones catch a little light
+  // the eye: half-lidded, slit pupil, and a slow, unbothered blink
+  const lid = ((t + 1.7) % 8) < 0.22 ? 1 : 0.46; // how much of the eye the lid covers
+  c.save(); c.translate(-27, -20); c.fillStyle = '#9aa98a'; c.beginPath(); c.ellipse(0, 0, 5.2, 4.6, 0, 0, 6.28); c.fill(); c.fillStyle = 'rgba(0,0,0,0.55)'; c.beginPath(); c.ellipse(0, 0, 5.2, 4.6, 0, 0, 6.28); c.fill();
+  c.fillStyle = '#b9c6a4'; c.beginPath(); c.ellipse(0, 0.6, 4.3, 3.7, 0, 0, 6.28); c.fill(); c.fillStyle = '#020608'; c.beginPath(); c.ellipse(-0.8, 0.8, 1, 3.1, 0, 0, 6.28); c.fill();
+  c.beginPath(); c.ellipse(0, 0, 5.4, 4.8, 0, 0, 6.28); c.clip(); c.fillStyle = '#071820'; c.fillRect(-7, -6, 14, 12 * lid - 1); c.restore();
+  c.strokeStyle = 'rgba(2,6,9,0.8)'; c.lineWidth = 1.1; c.beginPath(); c.moveTo(-33, -20 + 12 * 0.46 - 6.2); c.lineTo(-21, -20 + 12 * 0.46 - 6.2); c.stroke();
   // the rod and the lure
-  c.strokeStyle = '#143848'; c.lineWidth = 2.4; c.lineCap = 'round'; c.beginPath(); c.moveTo(-26, -39); c.bezierCurveTo(-32, -72, -60, -80, lx, ly); c.stroke();
-  c.strokeStyle = 'rgba(110,235,255,0.55)'; c.lineWidth = 0.8; for (let i = 0; i < 3; i++) { const a = -2.2 + i * 0.9 + Math.sin(t * 2 + i) * 0.25; c.beginPath(); c.moveTo(lx, ly); c.quadraticCurveTo(lx + Math.cos(a) * 8, ly + Math.sin(a) * 8 - 2, lx + Math.cos(a + 0.4) * 15, ly + Math.sin(a + 0.4) * 15); c.stroke(); }
-  const og = c.createRadialGradient(lx, ly, 0, lx, ly, 34 * pulse); og.addColorStop(0, 'rgba(255,255,255,1)'); og.addColorStop(0.16, 'rgba(160,252,255,0.97)'); og.addColorStop(0.5, 'rgba(40,200,240,0.45)'); og.addColorStop(1, 'rgba(40,200,240,0)'); c.fillStyle = og; c.beginPath(); c.arc(lx, ly, 34 * pulse, 0, 6.28); c.fill();
-  const rp = (t * 0.55) % 1; c.strokeStyle = 'rgba(120,240,255,' + (0.35 * (1 - rp)).toFixed(2) + ')'; c.lineWidth = 1.2; c.beginPath(); c.arc(lx, ly, 8 + rp * 46, 0, 6.28); c.stroke(); // a ring of light spreads out from the lure
-  c.fillStyle = '#f4ffff'; c.beginPath(); c.arc(lx, ly, 4.6, 0, 6.28); c.fill();
-  // a small fish drawn to the light
-  const fa = t * 0.5, fx = lx - 34 + Math.cos(fa) * 10, fy = ly + 16 + Math.sin(fa * 1.3) * 5, fd = Math.sin(fa) > 0 ? -1 : 1;
+  c.strokeStyle = '#0a1a22'; c.lineWidth = 2.2; c.lineCap = 'round'; c.beginPath(); c.moveTo(-26, -39); c.bezierCurveTo(-32, -72, -60, -80, lx, ly); c.stroke();
+  c.strokeStyle = 'rgba(110,205,220,0.3)'; c.lineWidth = 0.7; for (let n = 0; n < 3; n++) { const a = -2.2 + n * 0.9 + Math.sin(t * 0.8 + n) * 0.2; c.beginPath(); c.moveTo(lx, ly); c.quadraticCurveTo(lx + Math.cos(a) * 7, ly + Math.sin(a) * 7 - 2, lx + Math.cos(a + 0.4) * 13, ly + Math.sin(a + 0.4) * 13); c.stroke(); }
+  const og = c.createRadialGradient(lx, ly, 0, lx, ly, 26 * pulse); og.addColorStop(0, 'rgba(235,252,255,0.95)'); og.addColorStop(0.18, 'rgba(130,225,235,0.8)'); og.addColorStop(0.55, 'rgba(40,140,170,0.28)'); og.addColorStop(1, 'rgba(40,140,170,0)'); c.fillStyle = og; c.beginPath(); c.arc(lx, ly, 26 * pulse, 0, 6.28); c.fill();
+  c.fillStyle = '#e6fbff'; c.beginPath(); c.arc(lx, ly, 3.8, 0, 6.28); c.fill();
   c.restore();
-  hsFish(c, ax + fx * k, ay + fy * k, Math.max(0.5, 0.5 * k * 1.3), fd, 'rgba(120,225,245,0.9)', 'rgba(70,170,200,0.7)', '#031017');
-  // bubbles that wobble upward
-  for (let i = 0; i < 12; i++) { const sp = 14 + R(i + 120) * 16, x = R(i + 130) * W + Math.sin(t * (0.9 + R(i + 140)) + i * 2) * 7, y = H + 12 - ((t * sp + R(i + 150) * (H + 24)) % (H + 24)), r = Math.max(1.3, (1.6 + R(i + 160) * 2.6) * Math.sqrt(u)); c.strokeStyle = 'rgba(205,245,255,0.55)'; c.lineWidth = 1; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.stroke(); c.fillStyle = 'rgba(160,230,255,0.1)'; c.fill(); c.fillStyle = 'rgba(255,255,255,0.75)'; c.beginPath(); c.arc(x - r * 0.35, y - r * 0.35, Math.max(0.6, r * 0.22), 0, 6.28); c.fill(); }
+  // a few slow bubbles, hardly there
+  for (let n = 0; n < 7; n++) { const sp = 9 + R(n + 120) * 9, x = R(n + 130) * W + Math.sin(t * (0.5 + R(n + 140) * 0.4) + n * 2) * 5, y = H + 12 - ((t * sp + R(n + 150) * (H + 24)) % (H + 24)), r = Math.max(1.1, (1.3 + R(n + 160) * 2) * Math.sqrt(u)); c.strokeStyle = 'rgba(170,215,230,0.22)'; c.lineWidth = 1; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.stroke(); c.fillStyle = 'rgba(210,240,250,0.35)'; c.beginPath(); c.arc(x - r * 0.35, y - r * 0.35, Math.max(0.5, r * 0.2), 0, 6.28); c.fill(); }
 }
 function hsHalo2(c, x, y, r, a) { const q = c.createRadialGradient(x, y, 0, x, y, r); q.addColorStop(0, 'rgba(90,245,255,' + a.toFixed(2) + ')'); q.addColorStop(1, 'rgba(90,245,255,0)'); c.fillStyle = q; c.beginPath(); c.arc(x, y, r, 0, 6.28); c.fill(); }
 function heroScene(cv, id, tint, opts) {
@@ -9056,7 +9049,7 @@ const HERO_COLORS = [ // [id, name, top colour, bottom colour, glow]: deep, rich
   ['orange', 'Orange', '#b8501a', '#260c03', '#ff9a4d'], ['red', 'Red', '#9a1f2e', '#22050a', '#ff5a6e'], ['pink', 'Pink', '#a0306a', '#240818', '#ff7cc0'], ['purple', 'Purple', '#5b32b0', '#130935', '#b48cff'],
   ['sunset', 'Sunset', '#d8643a', '#3a0f2e', '#ffb36b'], ['aurora', 'Aurora', '#2a9d8f', '#1d0b3a', '#7cfcc8'], ['midnight', 'Midnight', '#2a2f6b', '#04050f', '#8a9bff'], ['lava', 'Lava', '#c2330f', '#1a0300', '#ff7a3c'], ['mint', 'Mint', '#2fb58a', '#032a22', '#9ff5d4'], ['rose', 'Rose gold', '#b86a6a', '#2a0f14', '#ffc0b0']];
 const FRAME_NAMES = { none: 'No frame', gold: 'Gold', aqua: 'Aqua', coral: 'Coral', violet: 'Violet', aurora: 'Aurora' };
-const HERO_ANGLER = { cls: '', style: '--b1:#0b3a52;--b2:#01040a;--fg:#fff;--rg:#37f0ff', tint: '#37f0ff' }; // the deep-sea banner brings its own colours unless you pick one
+const HERO_ANGLER = { cls: '', style: '--b1:#06202c;--b2:#000104;--fg:#fff;--rg:#5fc4d6', tint: '#5fc4d6' }; // the deep-sea banner brings its own colours unless you pick one
 const HERO_AUTO = { hwquest: ['#3a1650', '#06030a'] }; // automatic colours that differ from the picture's own (Halloween: a violet night with an orange glow)
 const HERO_SCENES = [['reef', 'Reef', 'Everyone has this one', 2], ['none', 'Plain colour', 'Just the colour: no fish or bubbles', 1], ['skeleton', 'Skeleton fish', 'Complete the Halloween Quest', 2], ['marlin', 'Marlin strike', 'Master Front Row Seat', 4.7], ['dumbo', 'Dumbo octopus', 'Earn Abyssal Visitor', 1], ['flying', 'Flying fish', 'Master Wings Over Water', 0.9], ['angler', 'Deep-sea angler', 'One of a kind', 1.4]];
 function heroInfo(b) { // automatic = the colours of the profile picture; otherwise the chosen colour
